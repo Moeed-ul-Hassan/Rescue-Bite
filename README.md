@@ -82,17 +82,11 @@ Food waste is a global issue, while millions go hungry every day. Rescue Bite ai
    ```bash
    npm install
    ```  
-3. Set up environment variables:  
-   Create a `.env` file in the root directory and add the following:  
-   ```env
-   DATABASE_URL=your_postgres_connection_string
-   SESSION_SECRET=your_session_secret
-   ```  
-4. Initialize the database:  
+3. Initialize the database:  
    ```bash
    npm run db:push
    ```  
-5. Start the development server:  
+4. Start the development server:  
    ```bash
    npm run dev
    ```  
