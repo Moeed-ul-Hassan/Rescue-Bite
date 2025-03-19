@@ -19,7 +19,7 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { format } from "date-fns";
 import { Loader2, Users, Package, CheckCircle, TrendingUp, AlertCircle } from "lucide-react";
-import { apiRequest } from "@/lib/api";
+import { apiRequest } from "@/lib/queryClient";
 
 export default function AdminDashboard() {
   const { data: users, isLoading: usersLoading } = useQuery({
