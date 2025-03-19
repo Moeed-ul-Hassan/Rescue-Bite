@@ -1,4 +1,4 @@
-import { useAuth } from "@/hooks/use-auth";
+
 import { useQuery } from "@tanstack/react-query";
 import {
   Card,
@@ -7,6 +7,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import {
   Table,
   TableBody,
@@ -15,57 +16,56 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Loader2, Users, Package, Clock } from "lucide-react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { format } from "date-fns";
-import type { User, FoodListing, FoodRequest } from "@shared/schema";
-import {
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-} from "recharts";
+import { Loader2, Users, Package, CheckCircle, TrendingUp, AlertCircle } from "lucide-react";
+import { apiRequest } from "@/lib/api";
 
 export default function AdminDashboard() {
-  const { user } = useAuth();
-
-  const { data: users, isLoading: usersLoading } = useQuery<User[]>({
+  const { data: users, isLoading: usersLoading } = useQuery({
     queryKey: ["/api/users"],
+    queryFn: async () => {
+      const res = await apiRequest("GET", "/api/users");
+      return res.json();
+    },
   });
 
-  const { data: listings, isLoading: listingsLoading } = useQuery<FoodListing[]>({
+  const { data: listings, isLoading: listingsLoading } = useQuery({
     queryKey: ["/api/listings"],
+    queryFn: async () => {
+      const res = await apiRequest("GET", "/api/listings");
+      return res.json();
+    },
   });
 
-  const { data: requests, isLoading: requestsLoading } = useQuery<FoodRequest[]>({
+  const { data: requests, isLoading: requestsLoading } = useQuery({
     queryKey: ["/api/requests"],
+    queryFn: async () => {
+      const res = await apiRequest("GET", "/api/requests");
+      return res.json();
+    },
   });
-
-  if (!user || user.userType !== "admin") {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <p className="text-lg text-muted-foreground">Unauthorized access</p>
-      </div>
-    );
-  }
-
-  const restaurants = users?.filter((u) => u.userType === "restaurant") || [];
-  const ngos = users?.filter((u) => u.userType === "ngo") || [];
 
   const statsData = [
     {
-      name: "Total Listings",
-      value: listings?.length || 0,
+      name: "Total Users",
+      value: users?.length || 0,
+      icon: Users,
     },
     {
       name: "Active Listings",
       value: listings?.filter((l) => l.status === "available").length || 0,
+      icon: Package,
     },
     {
       name: "Completed Donations",
       value: requests?.filter((r) => r.status === "completed").length || 0,
+      icon: CheckCircle,
+    },
+    {
+      name: "Success Rate",
+      value: `${Math.round((requests?.filter((r) => r.status === "completed").length || 0) / (requests?.length || 1) * 100)}%`,
+      icon: TrendingUp,
     },
   ];
 
@@ -85,164 +85,145 @@ export default function AdminDashboard() {
           </div>
         </div>
 
-        {/* Statistics Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          <Card>
-            <CardContent className="pt-6">
-              <div className="flex items-center space-x-4">
-                <Users className="h-8 w-8 text-primary" />
-                <div>
-                  <p className="text-sm text-muted-foreground">
-                    Registered Restaurants
-                  </p>
-                  <p className="text-2xl font-bold">{restaurants.length}</p>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          {statsData.map((stat, index) => (
+            <Card key={index}>
+              <CardContent className="pt-6">
+                <div className="flex items-center space-x-4">
+                  <div className="p-2 bg-primary/10 rounded-full">
+                    <stat.icon className="h-6 w-6 text-primary" />
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium">{stat.name}</p>
+                    <p className="text-2xl font-bold">{stat.value}</p>
+                  </div>
                 </div>
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardContent className="pt-6">
-              <div className="flex items-center space-x-4">
-                <Package className="h-8 w-8 text-primary" />
-                <div>
-                  <p className="text-sm text-muted-foreground">
-                    Registered NGOs
-                  </p>
-                  <p className="text-2xl font-bold">{ngos.length}</p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardContent className="pt-6">
-              <div className="flex items-center space-x-4">
-                <Clock className="h-8 w-8 text-primary" />
-                <div>
-                  <p className="text-sm text-muted-foreground">
-                    Total Food Rescued
-                  </p>
-                  <p className="text-2xl font-bold">
-                    {requests?.filter((r) => r.status === "completed").length || 0}{" "}
-                    meals
-                  </p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+              </CardContent>
+            </Card>
+          ))}
         </div>
 
-        {/* Analytics Chart */}
-        <Card className="mb-8">
-          <CardHeader>
-            <CardTitle>Platform Analytics</CardTitle>
-            <CardDescription>Overview of platform activity</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="h-[300px]">
-              <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={statsData}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="name" />
-                  <YAxis />
-                  <Tooltip />
-                  <Bar dataKey="value" fill="hsl(var(--primary))" />
-                </BarChart>
-              </ResponsiveContainer>
-            </div>
-          </CardContent>
-        </Card>
+        <Tabs defaultValue="activity">
+          <TabsList>
+            <TabsTrigger value="activity">Recent Activity</TabsTrigger>
+            <TabsTrigger value="users">User Management</TabsTrigger>
+            <TabsTrigger value="alerts">System Alerts</TabsTrigger>
+          </TabsList>
 
-        {/* Users Table */}
-        <Card className="mb-8">
-          <CardHeader>
-            <CardTitle>Registered Users</CardTitle>
-            <CardDescription>
-              Overview of all registered restaurants and NGOs
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            {usersLoading ? (
-              <div className="flex justify-center py-8">
-                <Loader2 className="h-8 w-8 animate-spin text-primary" />
-              </div>
-            ) : (
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Name</TableHead>
-                    <TableHead>Type</TableHead>
-                    <TableHead>Username</TableHead>
-                    <TableHead>Address</TableHead>
-                    <TableHead>Phone</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {users?.map((user) => (
-                    <TableRow key={user.id}>
-                      <TableCell className="font-medium">{user.name}</TableCell>
-                      <TableCell className="capitalize">{user.userType}</TableCell>
-                      <TableCell>{user.username}</TableCell>
-                      <TableCell>{user.address}</TableCell>
-                      <TableCell>{user.phone}</TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            )}
-          </CardContent>
-        </Card>
+          <TabsContent value="activity" className="space-y-4">
+            <Card>
+              <CardHeader>
+                <CardTitle>Recent Activity</CardTitle>
+                <CardDescription>Latest food listings and requests</CardDescription>
+              </CardHeader>
+              <CardContent>
+                {listingsLoading || requestsLoading ? (
+                  <div className="flex justify-center py-8">
+                    <Loader2 className="h-8 w-8 animate-spin text-primary" />
+                  </div>
+                ) : (
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>Type</TableHead>
+                        <TableHead>Details</TableHead>
+                        <TableHead>Status</TableHead>
+                        <TableHead>Date</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {listings?.slice(0, 5).map((listing) => (
+                        <TableRow key={`listing-${listing.id}`}>
+                          <TableCell>Listing</TableCell>
+                          <TableCell>
+                            {listing.foodType} - {listing.quantity}
+                          </TableCell>
+                          <TableCell className="capitalize">{listing.status}</TableCell>
+                          <TableCell>
+                            {format(new Date(listing.expiryTime), "PPp")}
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                      {requests?.slice(0, 5).map((request) => (
+                        <TableRow key={`request-${request.id}`}>
+                          <TableCell>Request</TableCell>
+                          <TableCell>Request #{request.id}</TableCell>
+                          <TableCell className="capitalize">{request.status}</TableCell>
+                          <TableCell>
+                            {format(new Date(request.requestedAt), "PPp")}
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                )}
+              </CardContent>
+            </Card>
+          </TabsContent>
 
-        {/* Recent Activity */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Recent Activity</CardTitle>
-            <CardDescription>Latest food listings and requests</CardDescription>
-          </CardHeader>
-          <CardContent>
-            {listingsLoading || requestsLoading ? (
-              <div className="flex justify-center py-8">
-                <Loader2 className="h-8 w-8 animate-spin text-primary" />
-              </div>
-            ) : (
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Type</TableHead>
-                    <TableHead>Details</TableHead>
-                    <TableHead>Status</TableHead>
-                    <TableHead>Date</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {listings?.map((listing) => (
-                    <TableRow key={`listing-${listing.id}`}>
-                      <TableCell>Listing</TableCell>
-                      <TableCell>
-                        {listing.foodType} - {listing.quantity}
-                      </TableCell>
-                      <TableCell className="capitalize">{listing.status}</TableCell>
-                      <TableCell>
-                        {format(new Date(listing.expiryTime), "PPp")}
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                  {requests?.map((request) => (
-                    <TableRow key={`request-${request.id}`}>
-                      <TableCell>Request</TableCell>
-                      <TableCell>Request #{request.id}</TableCell>
-                      <TableCell className="capitalize">{request.status}</TableCell>
-                      <TableCell>
-                        {format(new Date(request.requestedAt), "PPp")}
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            )}
-          </CardContent>
-        </Card>
+          <TabsContent value="users" className="space-y-4">
+            <Card>
+              <CardHeader>
+                <CardTitle>User Management</CardTitle>
+                <CardDescription>Manage platform users</CardDescription>
+              </CardHeader>
+              <CardContent>
+                {usersLoading ? (
+                  <div className="flex justify-center py-8">
+                    <Loader2 className="h-8 w-8 animate-spin text-primary" />
+                  </div>
+                ) : (
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>Name</TableHead>
+                        <TableHead>Type</TableHead>
+                        <TableHead>Contact</TableHead>
+                        <TableHead>Actions</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {users?.map((user) => (
+                        <TableRow key={user.id}>
+                          <TableCell>{user.name}</TableCell>
+                          <TableCell className="capitalize">{user.userType}</TableCell>
+                          <TableCell>{user.phone}</TableCell>
+                          <TableCell>
+                            <Button variant="outline" size="sm">
+                              View Details
+                            </Button>
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                )}
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          <TabsContent value="alerts" className="space-y-4">
+            <Card>
+              <CardHeader>
+                <CardTitle>System Alerts</CardTitle>
+                <CardDescription>Important notifications and warnings</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  <div className="flex items-center space-x-4 p-4 bg-yellow-50 rounded-lg">
+                    <AlertCircle className="h-5 w-5 text-yellow-500" />
+                    <div>
+                      <p className="font-medium">Low pickup rate in North Region</p>
+                      <p className="text-sm text-muted-foreground">
+                        Consider reaching out to more NGOs in this area
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+        </Tabs>
       </div>
     </div>
   );
