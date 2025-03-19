@@ -150,7 +150,8 @@ export default function RestaurantDashboard() {
                       ...data,
                       restaurantId: user.id,
                       status: "available",
-                    } as FoodListing)
+                      expiryTime: new Date(data.expiryTime).toISOString(),
+                    })
                   )}
                   className="space-y-4"
                 >
