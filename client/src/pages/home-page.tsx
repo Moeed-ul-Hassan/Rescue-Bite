@@ -4,10 +4,10 @@ import { useAuth } from "@/hooks/use-auth";
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { 
-  Heart, 
-  Clock, 
-  Store, 
+import {
+  Heart,
+  Clock,
+  Store,
   Building2,
   ArrowRight,
   LogOut,
@@ -39,21 +39,38 @@ export default function HomePage() {
   const ctaRef = useRef(null);
 
   useEffect(() => {
-    // Hero animation with parallax effect
-    gsap.from(heroRef.current, {
-      opacity: 0,
-      y: 100,
-      duration: 1.5,
-      ease: "power3.out"
+    // Debug logs to verify refs
+    console.log("Refs check:", {
+      hero: heroRef.current,
+      stats: statsRef.current,
+      features: featuresRef.current,
+      impact: impactRef.current,
+      events: eventsRef.current,
+      partners: partnersRef.current,
+      cta: ctaRef.current
     });
 
-    // Stats animation with counter effect
-    const statCards = gsap.utils.toArray(".stat-card");
-    statCards.forEach((card) => {
+    // Hero animation with enhanced parallax
+    if (heroRef.current) {
+      gsap.from(heroRef.current, {
+        opacity: 0,
+        y: 100,
+        duration: 1.5,
+        ease: "power3.out",
+        onStart: () => console.log("Hero animation started"),
+        onComplete: () => console.log("Hero animation completed")
+      });
+    }
+
+    // Stats animation with debugging
+    const statElements = document.querySelectorAll('.stat-card');
+    console.log("Found stat cards:", statElements.length);
+    statElements.forEach((card, index) => {
       gsap.from(card, {
         scrollTrigger: {
           trigger: card,
           start: "top 80%",
+          onEnter: () => console.log(`Stat card ${index} animation triggered`),
         },
         opacity: 0,
         y: 50,
@@ -62,11 +79,14 @@ export default function HomePage() {
       });
     });
 
-    // Features animation with stagger and scale
-    gsap.from(".feature-card", {
+    // Features animation with debug logging
+    const featureCards = document.querySelectorAll('.feature-card');
+    console.log("Found feature cards:", featureCards.length);
+    gsap.from(featureCards, {
       scrollTrigger: {
         trigger: featuresRef.current,
         start: "top 70%",
+        onEnter: () => console.log("Features animation triggered")
       },
       opacity: 0,
       y: 100,
@@ -76,55 +96,67 @@ export default function HomePage() {
       ease: "back.out(1.2)"
     });
 
-    // Impact stories slide in
-    gsap.from(".impact-card", {
-      scrollTrigger: {
-        trigger: impactRef.current,
-        start: "top 70%",
-      },
-      x: -100,
-      opacity: 0,
-      stagger: 0.3,
-      duration: 1,
-      ease: "power2.out"
-    });
+    // Impact stories slide in with debugging
+    if (impactRef.current) {
+      gsap.from(".impact-card", {
+        scrollTrigger: {
+          trigger: impactRef.current,
+          start: "top 70%",
+          onEnter: () => console.log("Impact animation triggered"),
+        },
+        x: -100,
+        opacity: 0,
+        stagger: 0.3,
+        duration: 1,
+        ease: "power2.out"
+      });
+    }
 
-    // Events fade in and up
-    gsap.from(".event-card", {
-      scrollTrigger: {
-        trigger: eventsRef.current,
-        start: "top 70%",
-      },
-      y: 50,
-      opacity: 0,
-      stagger: 0.2,
-      duration: 0.8
-    });
+    // Events fade in and up with debugging
+    if (eventsRef.current) {
+      gsap.from(".event-card", {
+        scrollTrigger: {
+          trigger: eventsRef.current,
+          start: "top 70%",
+          onEnter: () => console.log("Events animation triggered"),
+        },
+        y: 50,
+        opacity: 0,
+        stagger: 0.2,
+        duration: 0.8
+      });
+    }
 
-    // Partners logo reveal
-    gsap.from(".partner-logo", {
-      scrollTrigger: {
-        trigger: partnersRef.current,
-        start: "top 80%",
-      },
-      opacity: 0,
-      scale: 0.5,
-      stagger: 0.1,
-      duration: 0.5,
-      ease: "back.out(2)"
-    });
+    // Partners logo reveal with debugging
+    if (partnersRef.current) {
+      gsap.from(".partner-logo", {
+        scrollTrigger: {
+          trigger: partnersRef.current,
+          start: "top 80%",
+          onEnter: () => console.log("Partners animation triggered"),
+        },
+        opacity: 0,
+        scale: 0.5,
+        stagger: 0.1,
+        duration: 0.5,
+        ease: "back.out(2)"
+      });
+    }
 
-    // CTA section reveal
-    gsap.from(ctaRef.current, {
-      scrollTrigger: {
-        trigger: ctaRef.current,
-        start: "top 70%",
-      },
-      opacity: 0,
-      scale: 0.95,
-      duration: 1,
-      ease: "power3.out"
-    });
+    // CTA section reveal with debugging
+    if (ctaRef.current) {
+      gsap.from(ctaRef.current, {
+        scrollTrigger: {
+          trigger: ctaRef.current,
+          start: "top 70%",
+          onEnter: () => console.log("CTA animation triggered"),
+        },
+        opacity: 0,
+        scale: 0.95,
+        duration: 1,
+        ease: "power3.out"
+      });
+    }
   }, []);
 
   return (
@@ -170,8 +202,8 @@ export default function HomePage() {
               Fight Food Waste, Feed Hope
             </h1>
             <p className="text-xl opacity-90 mb-8 leading-relaxed">
-              Connect restaurants with excess food to NGOs, creating a sustainable solution 
-              for food waste while helping those in need. Join our mission to build a 
+              Connect restaurants with excess food to NGOs, creating a sustainable solution
+              for food waste while helping those in need. Join our mission to build a
               better, more compassionate world.
             </p>
             {!user && (
@@ -303,7 +335,7 @@ export default function HomePage() {
                 <div>
                   <h3 className="text-xl font-bold mb-2">Fresh Bites Restaurant</h3>
                   <p className="text-muted-foreground">
-                    "We've reduced our food waste by 75% and helped feed over 500 people 
+                    "We've reduced our food waste by 75% and helped feed over 500 people
                     in our community through Food Rescue."
                   </p>
                 </div>
@@ -315,7 +347,7 @@ export default function HomePage() {
                 <div>
                   <h3 className="text-xl font-bold mb-2">Hope Foundation NGO</h3>
                   <p className="text-muted-foreground">
-                    "Food Rescue has helped us serve 200% more meals to families in need 
+                    "Food Rescue has helped us serve 200% more meals to families in need
                     while saving on food costs."
                   </p>
                 </div>
@@ -345,7 +377,7 @@ export default function HomePage() {
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-4xl font-bold mb-8">Join the Movement Today</h2>
           <p className="text-xl opacity-90 mb-12 max-w-2xl mx-auto">
-            Whether you're a restaurant with surplus food or an NGO serving the community, 
+            Whether you're a restaurant with surplus food or an NGO serving the community,
             be part of the solution to reduce food waste and hunger.
           </p>
           {!user && (
