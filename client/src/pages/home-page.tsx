@@ -245,31 +245,38 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Features Section */}
-      <section className="py-20">
+      {/* How We Work Section */}
+      <section className="py-20 bg-accent-beige">
         <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center mb-12">How It Works</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="p-6 rounded-lg border border-gray-200 hover:border-primary/50 transition-colors">
-              <div className="h-12 w-12 bg-primary/10 rounded-full flex items-center justify-center mb-4">
-                <Store className="h-6 w-6 text-primary" />
+          <h2 className="text-3xl font-bold text-center mb-12">How We Work</h2>
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+            <div className="text-center">
+              <div className="h-16 w-16 bg-primary rounded-full flex items-center justify-center mx-auto mb-4">
+                <Store className="h-8 w-8 text-white" />
               </div>
-              <h3 className="text-xl font-semibold mb-2">List Excess Food</h3>
-              <p className="text-gray-600">Restaurants can easily list their excess food with just a few clicks</p>
+              <h3 className="text-xl font-semibold mb-2">1. Restaurant Lists Food</h3>
+              <p className="text-gray-600">Restaurants post their excess food details</p>
             </div>
-            <div className="p-6 rounded-lg border border-gray-200 hover:border-primary/50 transition-colors">
-              <div className="h-12 w-12 bg-primary/10 rounded-full flex items-center justify-center mb-4">
-                <Building2 className="h-6 w-6 text-primary" />
+            <div className="text-center">
+              <div className="h-16 w-16 bg-primary rounded-full flex items-center justify-center mx-auto mb-4">
+                <Building2 className="h-8 w-8 text-white" />
               </div>
-              <h3 className="text-xl font-semibold mb-2">NGOs Connect</h3>
-              <p className="text-gray-600">NGOs can browse and request available food donations in their area</p>
+              <h3 className="text-xl font-semibold mb-2">2. NGO Requests</h3>
+              <p className="text-gray-600">NGOs browse and request available food</p>
             </div>
-            <div className="p-6 rounded-lg border border-gray-200 hover:border-primary/50 transition-colors">
-              <div className="h-12 w-12 bg-primary/10 rounded-full flex items-center justify-center mb-4">
-                <Heart className="h-6 w-6 text-primary" />
+            <div className="text-center">
+              <div className="h-16 w-16 bg-primary rounded-full flex items-center justify-center mx-auto mb-4">
+                <CheckCircle className="h-8 w-8 text-white" />
               </div>
-              <h3 className="text-xl font-semibold mb-2">Make Impact</h3>
-              <p className="text-gray-600">Together we reduce food waste and help feed those in need</p>
+              <h3 className="text-xl font-semibold mb-2">3. Confirmation</h3>
+              <p className="text-gray-600">Restaurant confirms the pickup request</p>
+            </div>
+            <div className="text-center">
+              <div className="h-16 w-16 bg-primary rounded-full flex items-center justify-center mx-auto mb-4">
+                <HandHeart className="h-8 w-8 text-white" />
+              </div>
+              <h3 className="text-xl font-semibold mb-2">4. Food Pickup</h3>
+              <p className="text-gray-600">NGO collects food and distributes to those in need</p>
             </div>
           </div>
         </div>
