@@ -68,11 +68,19 @@ export default function RestaurantDashboard() {
   if (!user) return null;
 
   return (
-    <div className="min-h-screen bg-background p-8">
-      <div className="max-w-6xl mx-auto">
-        <h1 className="text-3xl font-bold mb-8">Restaurant Dashboard</h1>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+    <div className="container mx-auto px-4 py-8 space-y-8">
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-3xl font-bold">Restaurant Dashboard</h1>
+          <p className="text-gray-600">Manage your food listings and requests</p>
+        </div>
+        <div className="flex gap-4">
+          <Button variant="outline" onClick={() => form.reset()}>
+            Clear Form
+          </Button>
+        </div>
+      </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {/* Create Listing Form */}
           <Card>
             <CardHeader>
@@ -207,7 +215,6 @@ export default function RestaurantDashboard() {
             </CardContent>
           </Card>
         </div>
-      </div>
     </div>
   );
 }

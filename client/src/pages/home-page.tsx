@@ -246,6 +246,36 @@ export default function HomePage() {
       </section>
 
       {/* Features Section */}
+      <section className="py-20">
+        <div className="container mx-auto px-4">
+          <h2 className="text-3xl font-bold text-center mb-12">How It Works</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="p-6 rounded-lg border border-gray-200 hover:border-primary/50 transition-colors">
+              <div className="h-12 w-12 bg-primary/10 rounded-full flex items-center justify-center mb-4">
+                <Store className="h-6 w-6 text-primary" />
+              </div>
+              <h3 className="text-xl font-semibold mb-2">List Excess Food</h3>
+              <p className="text-gray-600">Restaurants can easily list their excess food with just a few clicks</p>
+            </div>
+            <div className="p-6 rounded-lg border border-gray-200 hover:border-primary/50 transition-colors">
+              <div className="h-12 w-12 bg-primary/10 rounded-full flex items-center justify-center mb-4">
+                <Building2 className="h-6 w-6 text-primary" />
+              </div>
+              <h3 className="text-xl font-semibold mb-2">NGOs Connect</h3>
+              <p className="text-gray-600">NGOs can browse and request available food donations in their area</p>
+            </div>
+            <div className="p-6 rounded-lg border border-gray-200 hover:border-primary/50 transition-colors">
+              <div className="h-12 w-12 bg-primary/10 rounded-full flex items-center justify-center mb-4">
+                <Heart className="h-6 w-6 text-primary" />
+              </div>
+              <h3 className="text-xl font-semibold mb-2">Make Impact</h3>
+              <p className="text-gray-600">Together we reduce food waste and help feed those in need</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Features Section */}
       <section ref={featuresRef} className="py-24 bg-white">
         <div className="container mx-auto px-4">
           <h2 className="text-4xl font-bold text-center mb-16">Key Features</h2>

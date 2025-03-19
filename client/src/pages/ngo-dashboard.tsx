@@ -53,10 +53,13 @@ export default function NgoDashboard() {
   if (!user) return null;
 
   return (
-    <div className="min-h-screen bg-background p-8">
-      <div className="max-w-6xl mx-auto">
-        <h1 className="text-3xl font-bold mb-8">NGO Dashboard</h1>
-
+    <div className="container mx-auto px-4 py-8 space-y-8">
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-3xl font-bold">NGO Dashboard</h1>
+          <p className="text-gray-600">Browse and request available food donations</p>
+        </div>
+      </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {/* Available Listings */}
           <Card>
@@ -160,6 +163,5 @@ export default function NgoDashboard() {
           </Card>
         </div>
       </div>
-    </div>
   );
 }
