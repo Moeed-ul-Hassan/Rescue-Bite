@@ -38,7 +38,9 @@ export const insertUserSchema = createInsertSchema(users).extend({
   phone: z.string().min(10, "Phone must be at least 10 characters"),
 });
 
-export const insertFoodListingSchema = createInsertSchema(foodListings);
+export const insertFoodListingSchema = createInsertSchema(foodListings).extend({
+  expiryTime: z.coerce.date()
+});
 export const insertFoodRequestSchema = createInsertSchema(foodRequests);
 
 export type User = typeof users.$inferSelect;

@@ -17,7 +17,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const validated = insertFoodListingSchema.parse({
         ...req.body,
         restaurantId: req.user.id,
-        status: "available"
+        status: "available",
+        expiryTime: new Date(req.body.expiryTime)
       });
       const listing = await storage.createFoodListing(validated);
       res.status(201).json(listing);
