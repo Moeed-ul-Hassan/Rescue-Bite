@@ -25,6 +25,7 @@ import {
   Linkedin
 } from "lucide-react";
 import "../styles/animations.css";
+import { CookieConsent } from "@/components/ui/cookie-consent";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -465,6 +466,7 @@ export default function HomePage() {
           </div>
         </div>
       </footer>
+      <CookieConsent />
     </div>
   );
 }
