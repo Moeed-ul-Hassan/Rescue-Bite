@@ -29,6 +29,11 @@ import { CookieConsent } from "@/components/ui/cookie-consent";
 
 gsap.registerPlugin(ScrollTrigger);
 
+// Show scroll markers in development
+ScrollTrigger.defaults({
+  markers: process.env.NODE_ENV === "development"
+});
+
 export default function HomePage() {
   const { user, logoutMutation } = useAuth();
   const heroRef = useRef(null);
@@ -38,6 +43,7 @@ export default function HomePage() {
   const eventsRef = useRef(null);
   const partnersRef = useRef(null);
   const ctaRef = useRef(null);
+  const socialMediaRef = useRef(null); // Added ref for social media section
 
   useEffect(() => {
     // Debug logs to verify refs
@@ -51,9 +57,11 @@ export default function HomePage() {
       cta: ctaRef.current
     });
 
-    // Hero animation with enhanced parallax
+    const animations = [];
+
+    // Hero animation
     if (heroRef.current) {
-      gsap.from(heroRef.current, {
+      const heroAnim = gsap.from(heroRef.current, {
         opacity: 0,
         y: 100,
         duration: 1.5,
@@ -61,13 +69,17 @@ export default function HomePage() {
         onStart: () => console.log("Hero animation started"),
         onComplete: () => console.log("Hero animation completed")
       });
+      animations.push(heroAnim);
     }
 
-    // Stats animation with debugging
+    // Stats animation with counter effect
     const statElements = document.querySelectorAll('.stat-card');
     console.log("Found stat cards:", statElements.length);
     statElements.forEach((card, index) => {
-      gsap.from(card, {
+      const numberElement = card.querySelector('.stat-number');
+      const targetNumber = parseInt(numberElement?.textContent || "0", 10);
+
+      const cardAnim = gsap.from(card, {
         scrollTrigger: {
           trigger: card,
           start: "top 80%",
@@ -76,14 +88,25 @@ export default function HomePage() {
         opacity: 0,
         y: 50,
         duration: 1,
-        ease: "power2.out"
+        ease: "power2.out",
+        onComplete: () => {
+          // Animate number counting up
+          gsap.to(numberElement, {
+            textContent: targetNumber,
+            duration: 2,
+            ease: "power1.inOut",
+            snap: { textContent: 1 },
+            onUpdate: () => console.log(`Updating number: ${numberElement?.textContent}`),
+          });
+        }
       });
+      animations.push(cardAnim);
     });
 
-    // Features animation with debug logging
+    // Features animation
     const featureCards = document.querySelectorAll('.feature-card');
     console.log("Found feature cards:", featureCards.length);
-    gsap.from(featureCards, {
+    const featuresAnim = gsap.from(featureCards, {
       scrollTrigger: {
         trigger: featuresRef.current,
         start: "top 70%",
@@ -96,10 +119,13 @@ export default function HomePage() {
       duration: 1,
       ease: "back.out(1.2)"
     });
+    animations.push(featuresAnim);
 
-    // Impact stories slide in with debugging
+    // Impact stories animation
     if (impactRef.current) {
-      gsap.from(".impact-card", {
+      const impactCards = document.querySelectorAll('.impact-card');
+      console.log("Found impact cards:", impactCards.length);
+      const impactAnim = gsap.from(impactCards, {
         scrollTrigger: {
           trigger: impactRef.current,
           start: "top 70%",
@@ -111,54 +137,17 @@ export default function HomePage() {
         duration: 1,
         ease: "power2.out"
       });
+      animations.push(impactAnim);
     }
 
-    // Events fade in and up with debugging
-    if (eventsRef.current) {
-      gsap.from(".event-card", {
-        scrollTrigger: {
-          trigger: eventsRef.current,
-          start: "top 70%",
-          onEnter: () => console.log("Events animation triggered"),
-        },
-        y: 50,
-        opacity: 0,
-        stagger: 0.2,
-        duration: 0.8
-      });
-    }
-
-    // Partners logo reveal with debugging
-    if (partnersRef.current) {
-      gsap.from(".partner-logo", {
-        scrollTrigger: {
-          trigger: partnersRef.current,
-          start: "top 80%",
-          onEnter: () => console.log("Partners animation triggered"),
-        },
-        opacity: 0,
-        scale: 0.5,
-        stagger: 0.1,
-        duration: 0.5,
-        ease: "back.out(2)"
-      });
-    }
-
-    // CTA section reveal with debugging
-    if (ctaRef.current) {
-      gsap.from(ctaRef.current, {
-        scrollTrigger: {
-          trigger: ctaRef.current,
-          start: "top 70%",
-          onEnter: () => console.log("CTA animation triggered"),
-        },
-        opacity: 0,
-        scale: 0.95,
-        duration: 1,
-        ease: "power3.out"
-      });
-    }
-  }, []);
+    // Return cleanup function
+    return () => {
+      // Kill all ScrollTrigger instances
+      ScrollTrigger.getAll().forEach(trigger => trigger.kill());
+      // Kill all animations
+      animations.forEach(anim => anim.kill());
+    };
+  }, []); // Empty dependency array since we want this to run once
 
   return (
     <div className="min-h-screen bg-background">
@@ -203,8 +192,8 @@ export default function HomePage() {
               Fight Food Waste, Feed Hope
             </h1>
             <p className="text-xl opacity-90 mb-8 leading-relaxed">
-              Connect restaurants with excess food to NGOs, creating a sustainable solution
-              for food waste while helping those in need. Join our mission to build a
+              Connect restaurants with excess food to NGOs, creating a sustainable solution 
+              for food waste while helping those in need. Join our mission to build a 
               better, more compassionate world.
             </p>
             {!user && (
@@ -234,21 +223,21 @@ export default function HomePage() {
             <div className="stat-card bg-white p-8 rounded-xl shadow-lg border">
               <div className="flex items-center gap-4 mb-4">
                 <UtensilsCrossed className="h-12 w-12 text-primary" strokeWidth={1.5} />
-                <h3 className="text-5xl font-bold">1,234</h3>
+                <h3 className="text-5xl font-bold stat-number">1,234</h3>
               </div>
               <p className="text-xl text-muted-foreground">Meals Rescued</p>
             </div>
             <div className="stat-card bg-white p-8 rounded-xl shadow-lg border">
               <div className="flex items-center gap-4 mb-4">
                 <Store className="h-12 w-12 text-primary" strokeWidth={1.5} />
-                <h3 className="text-5xl font-bold">56</h3>
+                <h3 className="text-5xl font-bold stat-number">56</h3>
               </div>
               <p className="text-xl text-muted-foreground">Partner Restaurants</p>
             </div>
             <div className="stat-card bg-white p-8 rounded-xl shadow-lg border">
               <div className="flex items-center gap-4 mb-4">
                 <Users className="h-12 w-12 text-primary" strokeWidth={1.5} />
-                <h3 className="text-5xl font-bold">23</h3>
+                <h3 className="text-5xl font-bold stat-number">23</h3>
               </div>
               <p className="text-xl text-muted-foreground">NGO Partners</p>
             </div>
@@ -336,7 +325,7 @@ export default function HomePage() {
                 <div>
                   <h3 className="text-xl font-bold mb-2">Fresh Bites Restaurant</h3>
                   <p className="text-muted-foreground">
-                    "We've reduced our food waste by 75% and helped feed over 500 people
+                    "We've reduced our food waste by 75% and helped feed over 500 people 
                     in our community through Food Rescue."
                   </p>
                 </div>
@@ -348,7 +337,7 @@ export default function HomePage() {
                 <div>
                   <h3 className="text-xl font-bold mb-2">Hope Foundation NGO</h3>
                   <p className="text-muted-foreground">
-                    "Food Rescue has helped us serve 200% more meals to families in need
+                    "Food Rescue has helped us serve 200% more meals to families in need 
                     while saving on food costs."
                   </p>
                 </div>
@@ -363,9 +352,9 @@ export default function HomePage() {
         <div className="container mx-auto px-4">
           <h2 className="text-4xl font-bold text-center mb-16">Our Partners</h2>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-            {[1, 2, 3, 4, 5, 6, 8].map((i) => (
-              <div key={i} className="partner-logo aspect-square bg-white rounded-xl p-8 flex items-center justify-center shadow-sm border hover:shadow-md transition-shadow">
-                <div className="w-full h-full bg-muted/30 rounded-lg"></div>
+            {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => ( // Added one more partner logo
+              <div key={i} className="partner-logo aspect-square bg-white rounded-xl p-8 flex items-center justify-center shadow-sm border hover:shadow-md transition-shadow duration-300 ease-in-out"> {/* Added hover animation */}
+                <img src={`/logos/partner-${i}.png`} alt={`Partner ${i}`} className="w-24 h-auto" /> {/* Replaced placeholder with image */}
               </div>
             ))}
           </div>
@@ -378,7 +367,7 @@ export default function HomePage() {
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-4xl font-bold mb-8">Join the Movement Today</h2>
           <p className="text-xl opacity-90 mb-12 max-w-2xl mx-auto">
-            Whether you're a restaurant with surplus food or an NGO serving the community,
+            Whether you're a restaurant with surplus food or an NGO serving the community, 
             be part of the solution to reduce food waste and hunger.
           </p>
           {!user && (
@@ -397,6 +386,28 @@ export default function HomePage() {
           )}
         </div>
       </section>
+
+      {/* Social Media Integration */}
+      <section ref={socialMediaRef} className="py-8 bg-gray-100">
+        <div className="container mx-auto px-4 text-center">
+          <h3 className="text-xl font-bold mb-4">Follow Us</h3>
+          <div className="flex gap-4 justify-center">
+            <a href="#" className="text-gray-700 hover:text-gray-900">
+              <Facebook className="h-6 w-6" />
+            </a>
+            <a href="#" className="text-gray-700 hover:text-gray-900">
+              <Twitter className="h-6 w-6" />
+            </a>
+            <a href="#" className="text-gray-700 hover:text-gray-900">
+              <Instagram className="h-6 w-6" />
+            </a>
+            <a href="#" className="text-gray-700 hover:text-gray-900">
+              <Linkedin className="h-6 w-6" />
+            </a>
+          </div>
+        </div>
+      </section>
+
 
       {/* Enhanced Footer */}
       <footer className="bg-[#1E3A1E] text-white">
