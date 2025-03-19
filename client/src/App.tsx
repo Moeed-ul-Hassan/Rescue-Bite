@@ -24,10 +24,27 @@ function Router() {
   );
 }
 
+import { useEffect, useState } from "react";
+import { Preloader } from "./components/ui/preloader";
+import "./styles/preloader.css";
+
 function App() {
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const hasVisited = localStorage.getItem("hasVisited");
+    if (!hasVisited) {
+      localStorage.setItem("hasVisited", "true");
+      setTimeout(() => setLoading(false), 3000);
+    } else {
+      setLoading(false);
+    }
+  }, []);
+
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
+        {loading && <Preloader />}
         <Router />
         <Toaster />
       </AuthProvider>
