@@ -33,9 +33,14 @@ export const foodRequests = pgTable("food_requests", {
 export const insertUserSchema = createInsertSchema(users).extend({
   password: z.string().min(6, "Password must be at least 6 characters"),
   userType: z.enum(["restaurant", "ngo", "admin"]),
-  name: z.string().min(2, "Name must be at least 2 characters"),
+  name: z.string()
+    .min(2, "Name must be at least 2 characters")
+    .regex(/^[a-zA-Z\s]+$/, "Name must contain only letters and spaces"),
   address: z.string().min(5, "Address must be at least 5 characters"),
-  phone: z.string().min(10, "Phone must be at least 10 characters"),
+  phone: z.string()
+    .regex(/^\d+$/, "Phone number must contain only digits")
+    .min(10, "Phone number must be at least 10 digits")
+    .max(15, "Phone number must not exceed 15 digits"),
 });
 
 export const insertFoodListingSchema = createInsertSchema(foodListings).extend({
