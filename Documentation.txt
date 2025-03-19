@@ -1,0 +1,156 @@
+Food Rescue (Rescue Bite) Documentation
+Table of Contents
+Overview
+System Architecture
+Features
+Technical Stack
+API Endpoints
+Database Schema
+User Roles
+Setup Instructions
+Deployment Guide
+1. Overview
+Food Rescue (Rescue Bite) is a web application designed to reduce food waste by connecting restaurants having excess food with NGOs and charities. The platform facilitates food donation and collection, making the process efficient and trackable.
+
+2. System Architecture
+Frontend: React + TypeScript (Client-side)
+Backend: Express.js (Server-side)
+Database: PostgreSQL with Drizzle ORM
+Authentication: Session-based auth
+Styling: Tailwind CSS
+3. Features
+For Restaurants
+Dashboard to manage food listings
+Create food donation listings
+Track donation requests
+Manage request approvals
+View donation history
+For NGOs
+Browse available food listings
+Request food pickups
+Track request status
+View collection history
+For Administrators
+Monitor platform activity
+View statistics and metrics
+Manage users
+Access analytics dashboard
+4. Technical Stack
+Frontend Dependencies
+React
+TypeScript
+Tailwind CSS
+Radix UI Components
+React Query
+React Hook Form
+date-fns
+Lucide Icons
+Backend Dependencies
+Express.js
+Drizzle ORM
+zod (validation)
+PostgreSQL
+5. API Endpoints
+Authentication
+POST /api/auth/login
+POST /api/auth/register
+POST /api/auth/logout
+GET /api/user
+Food Listings
+GET /api/listings
+POST /api/listings
+PATCH /api/listings/:id
+Food Requests
+GET /api/requests
+POST /api/requests
+PATCH /api/requests/:id
+6. Database Schema
+Users Table
+users (
+  id: serial primary key
+  username: text unique
+  password: text
+  userType: text
+  name: text
+  address: text
+  phone: text
+)
+Food Listings Table
+food_listings (
+  id: serial primary key
+  restaurantId: integer
+  foodType: text
+  quantity: text
+  expiryTime: timestamp
+  pickupLocation: text
+  status: text
+)
+Food Requests Table
+food_requests (
+  id: serial primary key
+  listingId: integer
+  ngoId: integer
+  status: text
+  requestedAt: timestamp
+)
+7. User Roles
+Restaurant
+Create food listings
+Manage donation requests
+Update profile
+View history
+NGO
+Browse listings
+Make requests
+Track collections
+View history
+Admin
+Full system access
+User management
+Analytics access
+System monitoring
+8. Setup Instructions
+Clone the repository
+Install dependencies:
+npm install
+Set up environment variables:
+
+Database URL
+Session secret
+Other configuration
+Initialize database:
+
+npm run db:push
+Start development server:
+npm run dev
+9. Deployment Guide
+Build the application:
+npm run build
+Deploy on Replit:
+Click "Deploy" in the Replit interface
+Choose "Reserved VM Deployments"
+Configure deployment settings
+Deploy the application
+The application will be accessible via the provided Replit URL.
+
+Security Considerations
+All passwords are hashed
+Session-based authentication
+Input validation using zod
+Request timeouts implemented
+CORS protection
+Rate limiting
+Performance Optimization
+Client-side caching with React Query
+Optimistic updates
+Lazy loading of components
+Efficient database queries
+Response compression
+For additional support or questions, refer to the repository issues section or contact the development team.
+
+Assistant mode
+
+advanced
+Claude 3.5 Sonnet V2
+
+Ask Assistant, use @ to include specific files...
