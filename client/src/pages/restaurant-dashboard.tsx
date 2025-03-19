@@ -21,7 +21,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Loader2, PlusCircle } from "lucide-react";
+import { Loader2, PlusCircle, Package, Clock, CheckCircle } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { format } from "date-fns";
 
@@ -69,18 +69,71 @@ export default function RestaurantDashboard() {
 
   return (
     <div className="container mx-auto px-4 py-8 space-y-8">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold">Restaurant Dashboard</h1>
-          <p className="text-gray-600">Manage your food listings and requests</p>
+      <div className="max-w-6xl mx-auto space-y-6">
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-3xl font-bold">Restaurant Dashboard</h1>
+            <p className="text-muted-foreground">Manage your food listings and donations</p>
+          </div>
+          <div className="flex gap-4">
+            <Button variant="outline" size="sm" onClick={() => form.reset()}>
+              Clear Form
+            </Button>
+            <Button size="sm">View History</Button>
+          </div>
         </div>
-        <div className="flex gap-4">
-          <Button variant="outline" onClick={() => form.reset()}>
-            Clear Form
-          </Button>
+
+        {/* Quick Stats */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <Card>
+            <CardContent className="pt-6">
+              <div className="flex items-center space-x-4">
+                <div className="p-2 bg-primary/10 rounded-full">
+                  <Package className="h-6 w-6 text-primary" />
+                </div>
+                <div>
+                  <p className="text-sm font-medium">Active Listings</p>
+                  <p className="text-2xl font-bold">
+                    {listings?.filter(l => l.status === 'available').length || 0}
+                  </p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardContent className="pt-6">
+              <div className="flex items-center space-x-4">
+                <div className="p-2 bg-primary/10 rounded-full">
+                  <Clock className="h-6 w-6 text-primary" />
+                </div>
+                <div>
+                  <p className="text-sm font-medium">Pending Requests</p>
+                  <p className="text-2xl font-bold">
+                    {listings?.filter(l => l.status === 'pending').length || 0}
+                  </p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardContent className="pt-6">
+              <div className="flex items-center space-x-4">
+                <div className="p-2 bg-primary/10 rounded-full">
+                  <CheckCircle className="h-6 w-6 text-primary" />
+                </div>
+                <div>
+                  <p className="text-sm font-medium">Completed Donations</p>
+                  <p className="text-2xl font-bold">
+                    {listings?.filter(l => l.status === 'completed').length || 0}
+                  </p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
         </div>
-      </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {/* Create Listing Form */}
           <Card>
             <CardHeader>
@@ -215,6 +268,7 @@ export default function RestaurantDashboard() {
             </CardContent>
           </Card>
         </div>
+      </div>
     </div>
   );
 }

@@ -9,7 +9,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Loader2 } from "lucide-react";
+import { Loader2, Package, Clock, CheckCircle } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { format } from "date-fns";
 import type { FoodListing, FoodRequest } from "@shared/schema";
@@ -54,12 +54,68 @@ export default function NgoDashboard() {
 
   return (
     <div className="container mx-auto px-4 py-8 space-y-8">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold">NGO Dashboard</h1>
-          <p className="text-gray-600">Browse and request available food donations</p>
+      <div className="max-w-6xl mx-auto space-y-6">
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-3xl font-bold">NGO Dashboard</h1>
+            <p className="text-muted-foreground">Browse and request available food donations</p>
+          </div>
+          <div className="flex gap-4">
+            <Button variant="outline" size="sm">
+              View History
+            </Button>
+            <Button size="sm">Active Requests</Button>
+          </div>
         </div>
-      </div>
+
+        {/* Quick Stats */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <Card>
+            <CardContent className="pt-6">
+              <div className="flex items-center space-x-4">
+                <div className="p-2 bg-primary/10 rounded-full">
+                  <Package className="h-6 w-6 text-primary" />
+                </div>
+                <div>
+                  <p className="text-sm font-medium">Available Listings</p>
+                  <p className="text-2xl font-bold">{availableListings?.length || 0}</p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardContent className="pt-6">
+              <div className="flex items-center space-x-4">
+                <div className="p-2 bg-primary/10 rounded-full">
+                  <Clock className="h-6 w-6 text-primary" />
+                </div>
+                <div>
+                  <p className="text-sm font-medium">Active Requests</p>
+                  <p className="text-2xl font-bold">
+                    {requests?.filter(r => r.status === 'pending').length || 0}
+                  </p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardContent className="pt-6">
+              <div className="flex items-center space-x-4">
+                <div className="p-2 bg-primary/10 rounded-full">
+                  <CheckCircle className="h-6 w-6 text-primary" />
+                </div>
+                <div>
+                  <p className="text-sm font-medium">Completed Pickups</p>
+                  <p className="text-2xl font-bold">
+                    {requests?.filter(r => r.status === 'completed').length || 0}
+                  </p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {/* Available Listings */}
           <Card>
@@ -163,5 +219,6 @@ export default function NgoDashboard() {
           </Card>
         </div>
       </div>
+    </div>
   );
 }

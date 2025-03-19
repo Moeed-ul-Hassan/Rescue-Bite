@@ -71,8 +71,19 @@ export default function AdminDashboard() {
 
   return (
     <div className="min-h-screen bg-background p-8">
-      <div className="max-w-7xl mx-auto">
-        <h1 className="text-3xl font-bold mb-8">Admin Dashboard</h1>
+      <div className="max-w-7xl mx-auto space-y-8">
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-3xl font-bold">Admin Dashboard</h1>
+            <p className="text-muted-foreground">Platform overview and management</p>
+          </div>
+          <div className="flex gap-4">
+            <Button variant="outline" size="sm">
+              Export Data
+            </Button>
+            <Button size="sm">Generate Report</Button>
+          </div>
+        </div>
 
         {/* Statistics Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
