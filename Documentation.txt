@@ -1,156 +1,224 @@
-Food Rescue (Rescue Bite) Documentation
-Table of Contents
-Overview
-System Architecture
-Features
-Technical Stack
-API Endpoints
-Database Schema
-User Roles
-Setup Instructions
-Deployment Guide
-1. Overview
-Food Rescue (Rescue Bite) is a web application designed to reduce food waste by connecting restaurants having excess food with NGOs and charities. The platform facilitates food donation and collection, making the process efficient and trackable.
+# Rescue Bite: Food Rescue Platform  
+Turning Surplus into Smiles  
 
-2. System Architecture
-Frontend: React + TypeScript (Client-side)
-Backend: Express.js (Server-side)
-Database: PostgreSQL with Drizzle ORM
-Authentication: Session-based auth
-Styling: Tailwind CSS
-3. Features
-For Restaurants
-Dashboard to manage food listings
-Create food donation listings
-Track donation requests
-Manage request approvals
-View donation history
-For NGOs
-Browse available food listings
-Request food pickups
-Track request status
-View collection history
-For Administrators
-Monitor platform activity
-View statistics and metrics
-Manage users
-Access analytics dashboard
-4. Technical Stack
-Frontend Dependencies
-React
-TypeScript
-Tailwind CSS
-Radix UI Components
-React Query
-React Hook Form
-date-fns
-Lucide Icons
-Backend Dependencies
-Express.js
-Drizzle ORM
-zod (validation)
-PostgreSQL
-5. API Endpoints
-Authentication
-POST /api/auth/login
-POST /api/auth/register
-POST /api/auth/logout
-GET /api/user
-Food Listings
-GET /api/listings
-POST /api/listings
-PATCH /api/listings/:id
-Food Requests
-GET /api/requests
-POST /api/requests
-PATCH /api/requests/:id
-6. Database Schema
-Users Table
+Rescue Bite is a **web-based platform** designed to tackle food waste by connecting restaurants with surplus food to NGOs and charities. By streamlining the donation process, Rescue Bite ensures that excess food reaches those in need, making the world a little greener and kinder.  
+
+---
+
+## Table of Contents  
+1. [What is Rescue Bite?](#1-what-is-rescue-bite)  
+2. [How It Works](#2-how-it-works)  
+3. [Key Features](#3-key-features)  
+4. [Tech Stack](#4-tech-stack)  
+5. [API Endpoints](#5-api-endpoints)  
+6. [Database Design](#6-database-design)  
+7. [User Roles](#7-user-roles)  
+8. [Getting Started](#8-getting-started)  
+9. [Deployment Guide](#9-deployment-guide)  
+10. [Security & Performance](#10-security--performance)  
+
+---
+
+## 1. What is Rescue Bite?  
+Rescue Bite is a food rescue platform that bridges the gap between restaurants with surplus food and NGOs/charities that can distribute it to those in need. By digitizing the donation process, Rescue Bite ensures efficiency, transparency, and accountability, making food rescue simple and impactful.  
+
+---
+
+## 2. How It Works  
+1. Restaurants** list surplus food with details like type, quantity, and pickup time.  
+2. NGOs** browse available listings and request pickups.  
+3. Restaurants approve requests, and NGOs collect the food.  
+4. Admins monitor the platform, ensuring smooth operations and providing insights.  
+
+---
+
+## **3. Key Features**  
+
+### **For Restaurants**  
+- **Dashboard**: Manage food listings and track donations.  
+- **Create Listings**: Post surplus food with details like type, quantity, and expiry.  
+- **Track Requests**: View and approve/reject NGO requests.  
+- **Donation History**: Access a log of past donations.  
+
+### **For NGOs**  
+- **Browse Listings**: View available food donations.  
+- **Request Pickups**: Send requests for food collection.  
+- **Track Status**: Monitor the status of requests (pending, approved, rejected).  
+- **Collection History**: Keep a record of past collections.  
+
+### **For Admins**  
+- **Platform Monitoring**: Oversee all activities on the platform.  
+- **User Management**: Add, edit, or remove users.  
+- **Analytics Dashboard**: View metrics like total donations, active users, and more.  
+
+---
+
+## **4. Tech Stack**  
+
+### **Frontend**  
+- **Framework**: React + TypeScript  
+- **Styling**: Tailwind CSS  
+- **UI Components**: Radix UI  
+- **State Management**: React Query  
+- **Forms**: React Hook Form  
+- **Icons**: Lucide Icons  
+- **Date Handling**: date-fns  
+
+### **Backend**  
+- **Framework**: Express.js  
+- **Database**: PostgreSQL  
+- **ORM**: Drizzle ORM  
+- **Validation**: zod  
+- **Authentication**: Session-based  
+
+---
+
+## **5. API Endpoints**  
+
+### **Authentication**  
+- `POST /api/auth/login` – User login  
+- `POST /api/auth/register` – User registration  
+- `POST /api/auth/logout` – User logout  
+- `GET /api/user` – Fetch user details  
+
+### **Food Listings**  
+- `GET /api/listings` – Fetch all food listings  
+- `POST /api/listings` – Create a new food listing  
+- `PATCH /api/listings/:id` – Update a food listing  
+
+### **Food Requests**  
+- `GET /api/requests` – Fetch all food requests  
+- `POST /api/requests` – Create a new food request  
+- `PATCH /api/requests/:id` – Update a food request  
+
+---
+
+## **6. Database Design**  
+
+### **Users Table**  
+```sql
 users (
-  id: serial primary key
-  username: text unique
-  password: text
-  userType: text
-  name: text
-  address: text
+  id: serial primary key,
+  username: text unique,
+  password: text,
+  userType: text,  -- Restaurant, NGO, Admin
+  name: text,
+  address: text,
   phone: text
 )
-Food Listings Table
+```
+
+### **Food Listings Table**  
+```sql
 food_listings (
-  id: serial primary key
-  restaurantId: integer
-  foodType: text
-  quantity: text
-  expiryTime: timestamp
-  pickupLocation: text
-  status: text
+  id: serial primary key,
+  restaurantId: integer references users(id),
+  foodType: text,
+  quantity: text,
+  expiryTime: timestamp,
+  pickupLocation: text,
+  status: text  -- Available, Claimed, Expired
 )
-Food Requests Table
+```
+
+### **Food Requests Table**  
+```sql
 food_requests (
-  id: serial primary key
-  listingId: integer
-  ngoId: integer
-  status: text
+  id: serial primary key,
+  listingId: integer references food_listings(id),
+  ngoId: integer references users(id),
+  status: text,  -- Pending, Approved, Rejected
   requestedAt: timestamp
 )
-7. User Roles
-Restaurant
-Create food listings
-Manage donation requests
-Update profile
-View history
-NGO
-Browse listings
-Make requests
-Track collections
-View history
-Admin
-Full system access
-User management
-Analytics access
-System monitoring
-8. Setup Instructions
-Clone the repository
-Install dependencies:
-npm install
-Set up environment variables:
+```
 
-Database URL
-Session secret
-Other configuration
-Initialize database:
+---
 
-npm run db:push
-Start development server:
-npm run dev
-9. Deployment Guide
-Build the application:
-npm run build
-Deploy on Replit:
-Click "Deploy" in the Replit interface
-Choose "Reserved VM Deployments"
-Configure deployment settings
-Deploy the application
-The application will be accessible via the provided Replit URL.
+## **7. User Roles**  
 
-Security Considerations
-All passwords are hashed
-Session-based authentication
-Input validation using zod
-Request timeouts implemented
-CORS protection
-Rate limiting
-Performance Optimization
-Client-side caching with React Query
-Optimistic updates
-Lazy loading of components
-Efficient database queries
-Response compression
-For additional support or questions, refer to the repository issues section or contact the development team.
+### **Restaurant**  
+- Create and manage food listings.  
+- Approve/reject NGO requests.  
+- View donation history.  
 
-Assistant mode
+### **NGO**  
+- Browse and request food listings.  
+- Track request status.  
+- View collection history.  
 
-advanced
-Claude 3.5 Sonnet V2
+### **Admin**  
+- Monitor platform activity.  
+- Manage users (add, edit, delete).  
+- Access analytics and reports.  
 
-Ask Assistant, use @ to include specific files...
+---
+
+## **8. Getting Started**  
+
+### **Prerequisites**  
+- Node.js (v18+)  
+- PostgreSQL  
+- Git  
+
+### **Setup Instructions**  
+1. Clone the repository:  
+   ```bash
+   git clone https://github.com/your-repo/rescue-bite.git
+   ```
+2. Install dependencies:  
+   ```bash
+   npm install
+   ```
+3. Set up environment variables:  
+   - `DATABASE_URL` – PostgreSQL connection string  
+   - `SESSION_SECRET` – Secret for session management  
+4. Initialize the database:  
+   ```bash
+   npm run db:push
+   ```
+5. Start the development server:  
+   ```bash
+   npm run dev
+   ```
+
+---
+
+## **9. Deployment Guide**  
+
+### **Steps to Deploy**  
+1. Build the application:  
+   ```bash
+   npm run build
+   ```
+2. Deploy on **Replit**:  
+   - Click "Deploy" in the Replit interface.  
+   - Choose "Reserved VM Deployments."  
+   - Configure deployment settings.  
+3. Access the application via the provided Replit URL.  
+
+---
+
+## **10. Security & Performance**  
+
+### **Security Measures**  
+- **Password Hashing**: All passwords are securely hashed.  
+- **Session-Based Auth**: Secure user authentication.  
+- **Input Validation**: Using `zod` for robust validation.  
+- **CORS Protection**: Prevent cross-origin attacks.  
+- **Rate Limiting**: Protect against brute-force attacks.  
+
+### **Performance Optimization**  
+- **Client-Side Caching**: Using React Query for efficient data fetching.  
+- **Optimistic Updates**: Smooth UI updates without waiting for server responses.  
+- **Lazy Loading**: Load components only when needed.  
+- **Database Optimization**: Efficient queries with Drizzle ORM.  
+- **Response Compression**: Reduce payload size for faster load times.  
+
+---
+
+## **Let’s Make a Difference Together!**  
+Rescue Bite is more than just a platform—it’s a movement to reduce food waste and feed the hungry. Join us in making the world a better place, one meal at a time.  
+
+**Credits**: Built with ❤️ by Cloud Sonnet.  
+
+---
