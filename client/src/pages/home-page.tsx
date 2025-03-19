@@ -15,7 +15,14 @@ import {
   Users,
   CheckCircle,
   MapPin,
-  Phone
+  Phone,
+  Calendar,
+  Newspaper,
+  HandHeart,
+  Facebook,
+  Twitter,
+  Instagram,
+  Linkedin
 } from "lucide-react";
 import "../styles/animations.css";
 
@@ -27,62 +34,96 @@ export default function HomePage() {
   const statsRef = useRef(null);
   const featuresRef = useRef(null);
   const impactRef = useRef(null);
+  const eventsRef = useRef(null);
+  const partnersRef = useRef(null);
   const ctaRef = useRef(null);
 
   useEffect(() => {
-    // Hero animation
+    // Hero animation with parallax effect
     gsap.from(heroRef.current, {
       opacity: 0,
-      y: 50,
-      duration: 1,
+      y: 100,
+      duration: 1.5,
       ease: "power3.out"
     });
 
-    // Stats animation
-    gsap.from(".stat-card", {
+    // Stats animation with counter effect
+    const statCards = gsap.utils.toArray(".stat-card");
+    statCards.forEach((card) => {
+      gsap.from(card, {
+        scrollTrigger: {
+          trigger: card,
+          start: "top 80%",
+        },
+        opacity: 0,
+        y: 50,
+        duration: 1,
+        ease: "power2.out"
+      });
+    });
+
+    // Features animation with stagger and scale
+    gsap.from(".feature-card", {
       scrollTrigger: {
-        trigger: statsRef.current,
-        start: "top center",
+        trigger: featuresRef.current,
+        start: "top 70%",
       },
       opacity: 0,
-      y: 30,
+      y: 100,
+      scale: 0.8,
+      stagger: 0.2,
+      duration: 1,
+      ease: "back.out(1.2)"
+    });
+
+    // Impact stories slide in
+    gsap.from(".impact-card", {
+      scrollTrigger: {
+        trigger: impactRef.current,
+        start: "top 70%",
+      },
+      x: -100,
+      opacity: 0,
+      stagger: 0.3,
+      duration: 1,
+      ease: "power2.out"
+    });
+
+    // Events fade in and up
+    gsap.from(".event-card", {
+      scrollTrigger: {
+        trigger: eventsRef.current,
+        start: "top 70%",
+      },
+      y: 50,
+      opacity: 0,
       stagger: 0.2,
       duration: 0.8
     });
 
-    // Features animation
-    gsap.from(".feature-card", {
+    // Partners logo reveal
+    gsap.from(".partner-logo", {
       scrollTrigger: {
-        trigger: featuresRef.current,
-        start: "top center",
+        trigger: partnersRef.current,
+        start: "top 80%",
       },
       opacity: 0,
-      y: 50,
-      stagger: 0.3,
-      duration: 1
+      scale: 0.5,
+      stagger: 0.1,
+      duration: 0.5,
+      ease: "back.out(2)"
     });
 
-    // Impact stories animation
-    gsap.from(".impact-card", {
-      scrollTrigger: {
-        trigger: impactRef.current,
-        start: "top center",
-      },
-      opacity: 0,
-      x: -30,
-      stagger: 0.3,
-      duration: 0.8
-    });
-
-    // CTA animation
+    // CTA section reveal
     gsap.from(ctaRef.current, {
       scrollTrigger: {
         trigger: ctaRef.current,
-        start: "top center",
+        start: "top 70%",
       },
       opacity: 0,
       scale: 0.95,
-      duration: 0.8
+      duration: 1,
+      ease: "power3.out"
     });
   }, []);
 
@@ -212,6 +253,45 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* Events & News Section */}
+      <section ref={eventsRef} className="py-24 bg-white">
+        <div className="container mx-auto px-4">
+          <h2 className="text-4xl font-bold text-center mb-16">Latest Updates</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="event-card bg-muted/30 rounded-xl p-8">
+              <Calendar className="h-10 w-10 text-primary mb-4" />
+              <h3 className="text-xl font-bold mb-2">Community Food Drive</h3>
+              <p className="text-muted-foreground mb-4">Join us this weekend for our biggest food rescue event of the year.</p>
+              <Link href="/events">
+                <Button variant="link" className="p-0">
+                  Learn More <ArrowRight className="h-4 w-4 ml-2" />
+                </Button>
+              </Link>
+            </div>
+            <div className="event-card bg-muted/30 rounded-xl p-8">
+              <Newspaper className="h-10 w-10 text-primary mb-4" />
+              <h3 className="text-xl font-bold mb-2">1000th Meal Rescued!</h3>
+              <p className="text-muted-foreground mb-4">We've hit a major milestone in our mission to reduce food waste.</p>
+              <Link href="/news">
+                <Button variant="link" className="p-0">
+                  Read Story <ArrowRight className="h-4 w-4 ml-2" />
+                </Button>
+              </Link>
+            </div>
+            <div className="event-card bg-muted/30 rounded-xl p-8">
+              <HandHeart className="h-10 w-10 text-primary mb-4" />
+              <h3 className="text-xl font-bold mb-2">New Partnerships</h3>
+              <p className="text-muted-foreground mb-4">Five new restaurants have joined our network this month.</p>
+              <Link href="/partners">
+                <Button variant="link" className="p-0">
+                  View Partners <ArrowRight className="h-4 w-4 ml-2" />
+                </Button>
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Impact Stories */}
       <section ref={impactRef} className="py-24 bg-muted/50">
         <div className="container mx-auto px-4">
@@ -245,6 +325,21 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* Partners Section */}
+      <section ref={partnersRef} className="py-24 bg-muted/50">
+        <div className="container mx-auto px-4">
+          <h2 className="text-4xl font-bold text-center mb-16">Our Partners</h2>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+            {[1, 2, 3, 4, 5, 6, 8].map((i) => (
+              <div key={i} className="partner-logo aspect-square bg-white rounded-xl p-8 flex items-center justify-center shadow-sm border hover:shadow-md transition-shadow">
+                <div className="w-full h-full bg-muted/30 rounded-lg"></div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+
       {/* CTA Section */}
       <section ref={ctaRef} className="cta-gradient text-white py-24">
         <div className="container mx-auto px-4 text-center">
@@ -270,38 +365,66 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Footer */}
+      {/* Enhanced Footer */}
       <footer className="bg-[#1E3A1E] text-white">
-        <div className="container mx-auto px-4 py-12">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+        <div className="container mx-auto px-4 py-16">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
             <div>
-              <div className="flex items-center gap-2 mb-4">
-                <Heart className="h-6 w-6" />
-                <span className="font-bold text-xl">Food Rescue</span>
+              <div className="flex items-center gap-2 mb-6">
+                <Heart className="h-8 w-8" />
+                <span className="font-bold text-2xl">Food Rescue</span>
               </div>
-              <p className="text-white/70">
+              <p className="text-white/70 leading-relaxed">
                 Building a more sustainable and compassionate world through food rescue.
+                Together, we can make a difference in our community.
               </p>
             </div>
             <div>
-              <h3 className="font-bold mb-4">Quick Links</h3>
-              <ul className="space-y-2 text-white/70">
+              <h3 className="font-bold text-lg mb-6">Quick Links</h3>
+              <ul className="space-y-4 text-white/70">
                 <li><Link href="/about">About Us</Link></li>
-                <li><Link href="/contact">Contact</Link></li>
+                <li><Link href="/how-it-works">How It Works</Link></li>
+                <li><Link href="/impact">Our Impact</Link></li>
+                <li><Link href="/contact">Contact Us</Link></li>
+              </ul>
+            </div>
+            <div>
+              <h3 className="font-bold text-lg mb-6">Get Involved</h3>
+              <ul className="space-y-4 text-white/70">
+                <li><Link href="/volunteer">Volunteer</Link></li>
+                <li><Link href="/donate">Donate</Link></li>
+                <li><Link href="/partners">Partner With Us</Link></li>
                 <li><Link href="/faqs">FAQs</Link></li>
               </ul>
             </div>
             <div>
-              <h3 className="font-bold mb-4">Contact</h3>
-              <ul className="space-y-2 text-white/70">
-                <li>info@foodrescue.org</li>
-                <li>+1 (555) 123-4567</li>
-              </ul>
-            </div>
-            <div>
-              <h3 className="font-bold mb-4">Social</h3>
-              <div className="flex gap-4">
-                {/* Add social media icons here */}
+              <h3 className="font-bold text-lg mb-6">Connect With Us</h3>
+              <div className="space-y-4">
+                <p className="text-white/70">Sign up for our newsletter:</p>
+                <div className="flex gap-2">
+                  <input
+                    type="email"
+                    placeholder="Enter your email"
+                    className="flex-1 rounded-lg bg-white/10 px-4 py-2 text-white placeholder:text-white/50"
+                  />
+                  <Button className="bg-white text-[#1E3A1E] hover:bg-white/90">
+                    Subscribe
+                  </Button>
+                </div>
+                <div className="flex gap-4 mt-6">
+                  <a href="#" className="text-white/70 hover:text-white">
+                    <Facebook className="h-6 w-6" />
+                  </a>
+                  <a href="#" className="text-white/70 hover:text-white">
+                    <Twitter className="h-6 w-6" />
+                  </a>
+                  <a href="#" className="text-white/70 hover:text-white">
+                    <Instagram className="h-6 w-6" />
+                  </a>
+                  <a href="#" className="text-white/70 hover:text-white">
+                    <Linkedin className="h-6 w-6" />
+                  </a>
+                </div>
               </div>
             </div>
           </div>
