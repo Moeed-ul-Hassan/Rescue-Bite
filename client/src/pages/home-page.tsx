@@ -503,7 +503,13 @@ export default function HomePage() {
             </div>
           </div>
           <div className="border-t border-white/10 mt-12 pt-8 text-center text-white/70">
-            <p>© {new Date().getFullYear()} Food Rescue. All rights reserved.</p>
+            <div className="text-sm text-muted-foreground space-y-2">
+              <div className="flex gap-4">
+                <Link href="/terms" className="hover:underline">Terms & Conditions</Link>
+                <Link href="/privacy" className="hover:underline">Privacy Policy</Link>
+              </div>
+              <p>© {new Date().getFullYear()} Food Rescue. All rights reserved.</p>
+            </div>
           </div>
         </div>
       </footer>
