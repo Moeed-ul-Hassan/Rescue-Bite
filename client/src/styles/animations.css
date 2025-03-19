@@ -1,0 +1,46 @@
+.section-fade-in {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.feature-card {
+  transition: transform 0.3s ease;
+}
+
+.feature-card:hover {
+  transform: translateY(-5px);
+}
+
+.impact-card {
+  opacity: 0;
+  transform: translateX(-20px);
+}
+
+.partner-logo {
+  filter: grayscale(100%);
+  transition: filter 0.3s ease;
+}
+
+.partner-logo:hover {
+  filter: grayscale(0%);
+}
+
+.cta-gradient {
+  background: linear-gradient(135deg, #1E3A1E 0%, #2C2C2C 100%);
+}
+
+.hero-gradient {
+  background: linear-gradient(to right bottom, #1E3A1E 0%, #2C2C2C 100%);
+}
+
+.text-gradient {
+  background: linear-gradient(to right, #4CAF50, #1E3A1E);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.hero-pattern {
+  background-image: radial-gradient(#4CAF50 0.5px, transparent 0.5px);
+  background-size: 15px 15px;
+  opacity: 0.1;
+}
