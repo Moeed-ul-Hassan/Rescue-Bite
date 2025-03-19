@@ -247,7 +247,7 @@ export default function AuthPage() {
         <div className="max-w-md text-white">
           <div className="flex items-center gap-2 mb-8">
             <Heart className="h-8 w-8" />
-            <h1 className="text-2xl font-bold">Food Rescue</h1>
+            <h1 className="text-2xl font-bold">Rescue Bite</h1>
           </div>
           <h2 className="text-4xl font-bold mb-6">
             Join Our Mission to Fight Food Waste
