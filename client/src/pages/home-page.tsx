@@ -205,7 +205,7 @@ export default function HomePage() {
                   </Button>
                 </Link>
                 <Link href="/auth?type=ngo">
-                  <Button size="lg" variant="outline" className="w-full sm:w-auto border-white text-white hover:bg-white/10">
+                  <Button size="lg" variant="outline" className="w-full sm:w-auto border-white text-primary hover:bg-white hover:text-primary">
                     Join as NGO
                     <ArrowRight className="ml-2 h-4 w-4" />
                   </Button>
