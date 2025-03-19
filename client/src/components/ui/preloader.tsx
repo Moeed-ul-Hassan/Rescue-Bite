@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 
 export function Preloader() {
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-background">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-primary">
       <svg xmlns="http://www.w3.org/2000/svg" height="200px" width="200px" viewBox="0 0 200 200" className="pencil">
         <defs>
           <clipPath id="pencil-eraser">

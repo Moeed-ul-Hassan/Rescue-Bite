@@ -4,6 +4,13 @@ export default {
   darkMode: ["class"],
   content: ["./client/index.html", "./client/src/**/*.{js,jsx,ts,tsx}"],
   theme: {
+    container: {
+      center: true,
+      padding: "2rem",
+      screens: {
+        "2xl": "1400px",
+      },
+    },
     extend: {
       borderRadius: {
         lg: "var(--radius)",
@@ -24,10 +31,14 @@ export default {
         primary: {
           DEFAULT: "hsl(var(--primary))",
           foreground: "hsl(var(--primary-foreground))",
+          DEFAULT: "#1E3A1E",
+          orange: "#CC5500"
         },
         secondary: {
           DEFAULT: "hsl(var(--secondary))",
           foreground: "hsl(var(--secondary-foreground))",
+          charcoal: "#2C2C2C",
+          slate: "#4A4A4A"
         },
         muted: {
           DEFAULT: "hsl(var(--muted))",
@@ -36,6 +47,8 @@ export default {
         accent: {
           DEFAULT: "hsl(var(--accent))",
           foreground: "hsl(var(--accent-foreground))",
+          green: "#4CAF50",
+          beige: "#F5F5DC"
         },
         destructive: {
           DEFAULT: "hsl(var(--destructive))",
